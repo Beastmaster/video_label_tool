@@ -9,10 +9,13 @@ import json
 
 def decode_config(fname):
     structures = {}
-    with open(fname,'r') as fp:
-        infos = fp.read()
-        structures = json.loads(infos)
-    return structures
+    try:
+        with open(fname,'r') as fp:
+            infos = fp.read()
+            structures = json.loads(infos)
+        return structures
+    except:
+        return {}
 
 
 

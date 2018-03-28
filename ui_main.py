@@ -362,7 +362,11 @@ class MainWindow(Ui_MainWindow,QMainWindow):
                 if self.radio_brush_add.isChecked():
                     self.drawn_points.append((npos.x(),npos.y(),self.brush_size_spinBox.value()))
                 else:
-                    self.erase_points.append((npos.x(),npos.y(),self.brush_size_spinBox.value()))
+                    ele = (npos.x(),npos.y(),self.brush_size_spinBox.value())
+                    if ele in self.drawn_points:
+                        self.drawn_points.remove(ele)
+                    else:
+                        self.erase_points.append(ele)
             self.update()
 
     def mousePressEvent(self,event):
@@ -414,7 +418,7 @@ class MainWindow(Ui_MainWindow,QMainWindow):
         if self.check_block.isChecked():
             if e.key() == Qt.Key_Enter-1:
                 filename = self.image_file_list[self.frame_cnt]
-                self.img = cv2.cvtColor(cv2.imread(filename),cv2.COLOR_BGR2RGB)
+                #self.img = cv2.cvtColor(cv2.imread(filename),cv2.COLOR_BGR2RGB)
                 if self.radio_block_del.isChecked():
                     self.img = apply_modify(self.img,self.rect_origin,self.rect_end,mode="delete")
                 if self.radio_block_reserve.isChecked():
@@ -426,7 +430,7 @@ class MainWindow(Ui_MainWindow,QMainWindow):
         if self.check_brush.isCheckable():
             if e.key() == Qt.Key_Enter-1:
                 filename = self.image_file_list[self.frame_cnt]
-                self.img = cv2.cvtColor(cv2.imread(filename),cv2.COLOR_BGR2RGB)
+                #self.img = cv2.cvtColor(cv2.imread(filename),cv2.COLOR_BGR2RGB)
                 mod_img = draw_points_on_label(self.label,self.drawn_points)
                 mod_img = draw_points_on_label(mod_img,self.erase_points,mode='del')
                 self.show_picture_on_label(mod_img,self.disp_canvas)
